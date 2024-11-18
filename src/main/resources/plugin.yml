@@ -1,12 +1,8 @@
-name: PotatoSK
-description: PotatoSK fr
+name: PotatoSurvival
+description: PotatoSurvival fr
 authors: [ MCdragonmasters ]
-website: https://github.com/MCdragonmasters/PotatoSK
+website: nahh
 version: @version@
-main: com.mcdragonmasters.PotatoSK.PotatoSK
-api-version: '1.20'
-depend:
-  - Skript
-softdepend:
-  - WorldEdit
-  - Multiverse-Core
+main: com.mcdragonmasters.PotatoSurvival.PotatoSurvival
+api-version: '1.21'
+
