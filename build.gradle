@@ -21,11 +21,21 @@ repositories {
 dependencies {
     //Paper
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
-
+    implementation 'org.xerial:sqlite-jdbc:3.47.0.0'
     implementation "dev.jorel:commandapi-bukkit-shade:9.6.0"
+}
+build {
+    dependsOn(shadowJar)
+    tasks.withType(JavaCompile).tap {
+        configureEach {
+            options.compilerArgs.add("-Xlint:unchecked")
+            options.compilerArgs.add("-Xlint:deprecation")
+        }
+    }
 }
 
 shadowJar {
+    archiveClassifier = null
     relocate("dev.jorel.commandapi", "com.mcdragonmasters.PotatoSurvival.commandapi")
 }
 

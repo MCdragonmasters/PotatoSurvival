@@ -1,49 +1,31 @@
-package com.mcdragonmasters.PotatoSurvival;
+package com.mcdragonmasters.PotatoSurvival.listeners;
 
-import com.mcdragonmasters.PotatoSurvival.Utils.BlockDataUtils;
-import com.mcdragonmasters.PotatoSurvival.commands.PvPCommand;
+import com.mcdragonmasters.PotatoSurvival.PotatoSurvival;
+import com.mcdragonmasters.PotatoSurvival.utils.BlockDataUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class Listeners implements Listener {
-    @EventHandler
-    public void onCatHurt(EntityDamageEvent e) {
-        if (e.getEntityType() == EntityType.CAT){
-            e.setCancelled(true);
-        }
-    }
-    @EventHandler
-    public void onExplode(EntityExplodeEvent e) {
-        if (e.getEntityType() == EntityType.CREEPER) {
-            e.blockList().clear();
-        }
-    }
+public class StringDuping implements Listener {
     @EventHandler
     public void onTripwireBreak(BlockBreakEvent e) {
         if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.SHEARS) {
-             BlockData blockData = e.getBlock().getBlockData();
-             if (!BlockDataUtils.getBooleanBlockDataTag(blockData, "disarmed")) {
-                 e.setCancelled(true);
-                 e.getBlock().setBlockData(BlockDataUtils.setBlockDataTag(blockData, "disarmed", true));
+            BlockData blockData = e.getBlock().getBlockData();
+            if (!BlockDataUtils.getBooleanBlockDataTag(blockData, "disarmed")) {
+                e.setCancelled(true);
+                e.getBlock().setBlockData(BlockDataUtils.setBlockDataTag(blockData, "disarmed", true));
             }
         }
     }
-
     private final Set<String> processedBlocks = new HashSet<>();
 
     @EventHandler
@@ -73,14 +55,6 @@ public class Listeners implements Listener {
                         processedBlocks.remove(blockKey);
                     }
                 }.runTaskTimer(PotatoSurvival.getInstance(), 1, 5);
-            }
-        }
-    }
-    @EventHandler
-    public void onPlayerDamagePlayer(EntityDamageByEntityEvent e) {
-        if (e.getDamager() instanceof Player && e.getEntity() instanceof Player) {
-            if (!PvPCommand.isPvPEnabled()) {
-                e.setCancelled(true);
             }
         }
     }

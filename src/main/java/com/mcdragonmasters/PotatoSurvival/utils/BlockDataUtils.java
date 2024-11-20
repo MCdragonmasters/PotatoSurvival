@@ -1,12 +1,12 @@
-package com.mcdragonmasters.PotatoSurvival.Utils;
+package com.mcdragonmasters.PotatoSurvival.utils;
 
-import com.mcdragonmasters.PotatoSurvival.PotatoSurvival;
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
 
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class BlockDataUtils {
 
@@ -47,7 +47,7 @@ public class BlockDataUtils {
                 BlockData blockData = Bukkit.createBlockData(newData);
                 return oldBlockData.merge(blockData);
             } catch (IllegalArgumentException ex) {
-                PotatoSurvival.Logger.warn("Could not parse block data: %s");
+                Logger.getLogger.warn("Could not parse block data: %s");
             }
         }
         return oldBlockData;
@@ -56,7 +56,7 @@ public class BlockDataUtils {
         return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
     public static boolean getBooleanBlockDataTag(BlockData blockData, String tag) {
-        return Boolean.parseBoolean(BlockDataUtils.getBlockDataValueFromTag(blockData, tag).toString());
+        return Boolean.parseBoolean(Objects.requireNonNull(BlockDataUtils.getBlockDataValueFromTag(blockData, tag)).toString());
     }
     public static boolean isNumber(String string) {
         return string.matches("\\d+");
