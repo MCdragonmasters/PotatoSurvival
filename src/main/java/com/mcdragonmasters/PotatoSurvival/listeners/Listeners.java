@@ -13,5 +13,7 @@ public class Listeners {
         manager.registerEvents(new NoCreeperBlockGriefing(), instance);
         manager.registerEvents(new PvP(), instance);
         manager.registerEvents(new StringDuping(), instance);
+        manager.registerEvents(new DiscoverRecipesOnJoin(), instance);
+        manager.registerEvents(new NoFarmlandTrample(), instance);
     }
 }
