@@ -1,4 +1,4 @@
-package com.mcdragonmasters.PotatoSurvival.commands;
+package com.mcdragonmasters.potatosurvival.commands;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.CommandPermission;
 import org.bukkit.Bukkit;

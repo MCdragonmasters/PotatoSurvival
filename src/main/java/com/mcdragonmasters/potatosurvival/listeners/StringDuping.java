@@ -1,7 +1,7 @@
-package com.mcdragonmasters.PotatoSurvival.listeners;
+package com.mcdragonmasters.potatosurvival.listeners;
 
-import com.mcdragonmasters.PotatoSurvival.PotatoSurvival;
-import com.mcdragonmasters.PotatoSurvival.utils.BlockDataUtils;
+import com.mcdragonmasters.potatosurvival.PotatoSurvival;
+import com.mcdragonmasters.potatosurvival.utils.BlockDataUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -1,6 +1,6 @@
-package com.mcdragonmasters.PotatoSurvival.listeners;
+package com.mcdragonmasters.potatosurvival.listeners;
 
-import com.mcdragonmasters.PotatoSurvival.commands.PvPCommand;
+import com.mcdragonmasters.potatosurvival.commands.PvPCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

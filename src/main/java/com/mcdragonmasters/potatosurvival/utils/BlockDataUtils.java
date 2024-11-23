@@ -1,4 +1,4 @@
-package com.mcdragonmasters.PotatoSurvival.utils;
+package com.mcdragonmasters.potatosurvival.utils;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.data.BlockData;
@@ -57,6 +57,9 @@ public class BlockDataUtils {
     }
     public static boolean getBooleanBlockDataTag(BlockData blockData, String tag) {
         return Boolean.parseBoolean(Objects.requireNonNull(BlockDataUtils.getBlockDataValueFromTag(blockData, tag)).toString());
+    }
+    public static String getStringBlockDataTag(BlockData blockData, String tag) {
+        return Objects.requireNonNull(BlockDataUtils.getBlockDataValueFromTag(blockData, tag)).toString();
     }
     public static boolean isNumber(String string) {
         return string.matches("\\d+");

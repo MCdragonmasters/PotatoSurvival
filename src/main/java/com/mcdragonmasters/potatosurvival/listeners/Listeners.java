@@ -1,6 +1,7 @@
-package com.mcdragonmasters.PotatoSurvival.listeners;
+package com.mcdragonmasters.potatosurvival.listeners;
 
-import static com.mcdragonmasters.PotatoSurvival.PotatoSurvival.instance;
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.config;
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.instance;
 
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
@@ -15,5 +16,8 @@ public class Listeners {
         manager.registerEvents(new StringDuping(), instance);
         manager.registerEvents(new DiscoverRecipesOnJoin(), instance);
         manager.registerEvents(new NoFarmlandTrample(), instance);
+        if (config.getBoolean("sit")) {
+            manager.registerEvents(new Sit(), instance);
+        }
     }
 }

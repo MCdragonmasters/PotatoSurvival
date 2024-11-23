@@ -1,8 +1,0 @@
-name: PotatoSurvival
-description: fr
-authors: [ MCdragonmasters ]
-website: nahh
-version: @version@
-main: com.mcdragonmasters.PotatoSurvival.PotatoSurvival
-api-version: '1.21'
-

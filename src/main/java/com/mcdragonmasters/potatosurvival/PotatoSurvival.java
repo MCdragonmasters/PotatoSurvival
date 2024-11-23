@@ -1,12 +1,12 @@
-package com.mcdragonmasters.PotatoSurvival;
+package com.mcdragonmasters.potatosurvival;
 
-import com.mcdragonmasters.PotatoSurvival.commands.EnderChestCommand;
-import com.mcdragonmasters.PotatoSurvival.commands.HomeCommand;
-import com.mcdragonmasters.PotatoSurvival.commands.PvPCommand;
-import com.mcdragonmasters.PotatoSurvival.commands.SetHomeCommand;
-import com.mcdragonmasters.PotatoSurvival.database.DatabaseManager;
-import com.mcdragonmasters.PotatoSurvival.listeners.Listeners;
-import com.mcdragonmasters.PotatoSurvival.utils.Logger;
+import com.mcdragonmasters.potatosurvival.commands.EnderChestCommand;
+import com.mcdragonmasters.potatosurvival.commands.HomeCommand;
+import com.mcdragonmasters.potatosurvival.commands.PvPCommand;
+import com.mcdragonmasters.potatosurvival.commands.SetHomeCommand;
+import com.mcdragonmasters.potatosurvival.database.HomesManager;
+import com.mcdragonmasters.potatosurvival.listeners.Listeners;
+import com.mcdragonmasters.potatosurvival.utils.Logger;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import org.bukkit.ChatColor;
@@ -14,10 +14,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
-@SuppressWarnings({"unused", "deprecation"})
+import java.io.File;
+
+@SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace"})
 public class PotatoSurvival extends JavaPlugin {
 
-    private static DatabaseManager databaseManager;
     public static PotatoSurvival instance;
     public static FileConfiguration config;
 
@@ -32,15 +33,19 @@ public class PotatoSurvival extends JavaPlugin {
         config = getConfig();
         instance = this;
         CommandAPI.onEnable();
-        databaseManager = new DatabaseManager();
-        try {
-            databaseManager.connect();
-            getLogger().info("Database connected!");
-        } catch (Exception e) {
-            getLogger().severe("Could not connect to database: " + e.getMessage());
-            getServer().getPluginManager().disablePlugin(this);
-            return;
+
+        File homesFile = new File(getDataFolder(), "homes.json");
+        if (!homesFile.exists()) {
+            try {
+                // Create the file if it does not exist
+                boolean newFile = homesFile.createNewFile();
+            } catch (Exception e) {
+                getLogger().warning("Could not create homes.json file!");
+                e.printStackTrace();
+            }
         }
+        HomesManager.loadHomes();
+
         //Register Event Listeners
         Listeners.registerListeners(getServer());
 
@@ -56,15 +61,8 @@ public class PotatoSurvival extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        try {
-            databaseManager.disconnect();
-        } catch (Exception e) {
-            getLogger().severe("Could not close database connection: " + e.getMessage());
-        }
+        HomesManager.saveHomes();
         CommandAPI.onDisable();
-    }
-    public static DatabaseManager getDatabaseManager() {
-        return  databaseManager;
     }
     public static String getPrefix() {
         return ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;

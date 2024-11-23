@@ -14,15 +14,13 @@ repositories {
     mavenLocal()
     //Paper
     maven {url = "https://repo.papermc.io/repository/maven-public/"}
-
-    maven { url = "https://repo.codemc.org/repository/maven-public/" }
 }
 
 dependencies {
     //Paper
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
     implementation 'org.xerial:sqlite-jdbc:3.47.0.0'
-    implementation "dev.jorel:commandapi-bukkit-shade:9.6.0"
+    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0"
 }
 build {
     dependsOn(shadowJar)
@@ -36,7 +34,7 @@ build {
 
 shadowJar {
     archiveClassifier = null
-    relocate("dev.jorel.commandapi", "com.mcdragonmasters.PotatoSurvival.commandapi")
+    relocate("dev.jorel.commandapi", "com.mcdragonmasters.potatosurvival.commandapi")
 }
 
 java {

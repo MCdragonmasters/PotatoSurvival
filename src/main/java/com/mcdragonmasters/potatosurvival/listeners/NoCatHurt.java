@@ -1,4 +1,4 @@
-package com.mcdragonmasters.PotatoSurvival.listeners;
+package com.mcdragonmasters.potatosurvival.listeners;
 
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
