@@ -8,6 +8,7 @@ import io.papermc.paper.plugin.bootstrap.PluginProviderContext;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings({"UnstableApiUsage", "unused"})
 public class PotatoBootstrap implements PluginBootstrap {
 
     @Override

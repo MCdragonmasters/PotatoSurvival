@@ -16,7 +16,7 @@ public class RegisterListeners {
         manager.registerEvents(new StringDuping(), instance);
         manager.registerEvents(new DiscoverRecipesOnJoin(), instance);
         manager.registerEvents(new NoFarmlandTrample(), instance);
-        //manager.registerEvents(new AutoSmelt(), instance);
+        manager.registerEvents(new AutoSmelt(), instance);
         if (config.getBoolean("sit")) {
             manager.registerEvents(new Sit(), instance);
         }
