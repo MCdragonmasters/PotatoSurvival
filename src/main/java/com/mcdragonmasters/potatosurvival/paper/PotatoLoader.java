@@ -9,7 +9,8 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.jetbrains.annotations.NotNull;
 import org.eclipse.aether.repository.RemoteRepository;
 
-public class PotatoPluginLoader implements PluginLoader {
+@SuppressWarnings({"UnstableApiUsage", "unused"})
+public class PotatoLoader implements PluginLoader {
 
     @Override
     public void classloader(@NotNull PluginClasspathBuilder classpathBuilder) {

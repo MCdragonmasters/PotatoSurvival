@@ -1,10 +1,10 @@
-name: potatosurvival
+name: PotatoSurvival
 description: fr
 authors: [ MCdragonmasters ]
 website: nahh
 version: @version@
 main: com.mcdragonmasters.potatosurvival.PotatoSurvival
 api-version: '1.21.3'
-bootstrapper: com.mcdragonmasters.potatosurvival.paper.PotatoPluginBootstrap
-loader: com.mcdragonmasters.potatosurvival.paper.PotatoPluginLoader
+bootstrapper: com.mcdragonmasters.potatosurvival.paper.PotatoBootstrap
+loader: com.mcdragonmasters.potatosurvival.paper.PotatoLoader
 

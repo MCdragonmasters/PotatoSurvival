@@ -6,8 +6,8 @@ import static com.mcdragonmasters.potatosurvival.PotatoSurvival.instance;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 
-public class Listeners {
-    public static void registerListeners(Server server) {
+public class RegisterListeners {
+    public static void register(Server server) {
         PluginManager manager = server.getPluginManager();
         manager.registerEvents(new AutoReplaceCrop(), instance);
         manager.registerEvents(new NoCatHurt(), instance);
@@ -16,6 +16,7 @@ public class Listeners {
         manager.registerEvents(new StringDuping(), instance);
         manager.registerEvents(new DiscoverRecipesOnJoin(), instance);
         manager.registerEvents(new NoFarmlandTrample(), instance);
+        //manager.registerEvents(new AutoSmelt(), instance);
         if (config.getBoolean("sit")) {
             manager.registerEvents(new Sit(), instance);
         }

@@ -20,7 +20,7 @@ dependencies {
     //Paper
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
     implementation 'org.xerial:sqlite-jdbc:3.47.0.0'
-    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.0"
+    implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1"
 }
 build {
     dependsOn(shadowJar)

@@ -5,7 +5,7 @@ import com.mcdragonmasters.potatosurvival.commands.HomeCommand;
 import com.mcdragonmasters.potatosurvival.commands.PvPCommand;
 import com.mcdragonmasters.potatosurvival.commands.SetHomeCommand;
 import com.mcdragonmasters.potatosurvival.database.HomesManager;
-import com.mcdragonmasters.potatosurvival.listeners.Listeners;
+import com.mcdragonmasters.potatosurvival.listeners.RegisterListeners;
 import com.mcdragonmasters.potatosurvival.utils.Logger;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
@@ -19,6 +19,7 @@ import java.io.File;
 @SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace"})
 public class PotatoSurvival extends JavaPlugin {
 
+    public static String nameSpace = "potatosurvival:";
     public static PotatoSurvival instance;
     public static FileConfiguration config;
 
@@ -46,8 +47,8 @@ public class PotatoSurvival extends JavaPlugin {
         }
         HomesManager.loadHomes();
 
-        //Register Event Listeners
-        Listeners.registerListeners(getServer());
+        //Register Event RegisterListeners
+        RegisterListeners.register(getServer());
 
         Logger.getLogger.success("Enabled");
 
@@ -63,6 +64,9 @@ public class PotatoSurvival extends JavaPlugin {
     public void onDisable() {
         HomesManager.saveHomes();
         CommandAPI.onDisable();
+    }
+    public static String getNameSpace() {
+        return nameSpace;
     }
     public static String getPrefix() {
         return ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;
