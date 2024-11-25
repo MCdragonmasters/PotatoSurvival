@@ -23,7 +23,7 @@ public class AutoSmelt {
                 event.registry().register(
                 // The key of the registry
                 // Plugins should use their own namespace instead of minecraft or papermc
-                TypedKey.create(RegistryKey.ENCHANTMENT, Key.key(nameSpace + "auto_smelt")),
+                TypedKey.create(RegistryKey.ENCHANTMENT, Key.key(nameSpace + ":" + "auto_smelt")),
                 b -> b.description(Component.text("Auto Smelt"))
                         .supportedItems(event.getOrCreateTag(ItemTypeTagKeys.PICKAXES))
                         .anvilCost(1)

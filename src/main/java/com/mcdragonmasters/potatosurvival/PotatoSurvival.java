@@ -1,9 +1,6 @@
 package com.mcdragonmasters.potatosurvival;
 
-import com.mcdragonmasters.potatosurvival.commands.EnderChestCommand;
-import com.mcdragonmasters.potatosurvival.commands.HomeCommand;
-import com.mcdragonmasters.potatosurvival.commands.PvPCommand;
-import com.mcdragonmasters.potatosurvival.commands.SetHomeCommand;
+import com.mcdragonmasters.potatosurvival.commands.RegisterCommands;
 import com.mcdragonmasters.potatosurvival.database.HomesManager;
 import com.mcdragonmasters.potatosurvival.listeners.RegisterListeners;
 import com.mcdragonmasters.potatosurvival.utils.Logger;
@@ -19,7 +16,8 @@ import java.io.File;
 @SuppressWarnings({"unused", "deprecation", "CallToPrintStackTrace"})
 public class PotatoSurvival extends JavaPlugin {
 
-    public static String nameSpace = "potatosurvival:";
+    public static String nameSpace = "potatosurvival";
+    public static String prefix = ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;
     public static PotatoSurvival instance;
     public static FileConfiguration config;
 
@@ -53,10 +51,7 @@ public class PotatoSurvival extends JavaPlugin {
         Logger.getLogger.success("Enabled");
 
         //Register Commands
-        PvPCommand.register();
-        EnderChestCommand.register();
-        HomeCommand.register();
-        SetHomeCommand.register();
+        RegisterCommands.register();
 
     }
 
@@ -69,7 +64,7 @@ public class PotatoSurvival extends JavaPlugin {
         return nameSpace;
     }
     public static String getPrefix() {
-        return ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;
+        return prefix;
     }
     public static Plugin getInstance() {
         return instance;

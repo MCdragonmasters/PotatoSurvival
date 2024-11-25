@@ -1,4 +1,4 @@
-package com.mcdragonmasters.potatosurvival.commands;
+package com.mcdragonmasters.potatosurvival.commands.homes;
 
 import com.mcdragonmasters.potatosurvival.database.HomesManager;
 import dev.jorel.commandapi.CommandAPICommand;

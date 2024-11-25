@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
 import java.util.Iterator;
 
 public class Utils {
@@ -24,5 +25,9 @@ public class Utils {
             }
         }
         return item;
+    }
+    public static String formatCoords(double x, double y, double z) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        return df.format(x) + ", " + df.format(y) + ", " + df.format(z);
     }
 }
