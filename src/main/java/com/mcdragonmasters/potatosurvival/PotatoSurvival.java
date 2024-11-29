@@ -20,6 +20,7 @@ public class PotatoSurvival extends JavaPlugin {
     public static String prefix = ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;
     public static PotatoSurvival instance;
     public static FileConfiguration config;
+    public static String prefixMini = "<gold>Potato Survival<gray> > <reset>";
 
     @Override
     public void onLoad() {

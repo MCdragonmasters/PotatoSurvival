@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PotatoSK.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PotatoSK.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PotatoSK.test.iml" filepath="$PROJECT_DIR$/.idea/modules/PotatoSK.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/PotatoSurvival.main.iml" filepath="$PROJECT_DIR$/.idea/modules/PotatoSurvival.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/PotatoSurvival.test.iml" filepath="$PROJECT_DIR$/.idea/modules/PotatoSurvival.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.mcdragonmasters.PotatoSK.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.mcdragonmasters.PotatoSK.main.iml" />
     </modules>
   </component>

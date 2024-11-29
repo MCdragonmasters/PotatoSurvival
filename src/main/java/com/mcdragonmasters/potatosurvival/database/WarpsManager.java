@@ -3,7 +3,10 @@ package com.mcdragonmasters.potatosurvival.database;
 import com.google.gson.*;
 import com.mcdragonmasters.potatosurvival.PotatoSurvival;
 import com.mcdragonmasters.potatosurvival.utils.Logger;
+import com.mcdragonmasters.potatosurvival.utils.Utils;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,7 +14,10 @@ import org.bukkit.entity.Player;
 import java.io.*;
 import java.util.*;
 
-@SuppressWarnings("CallToPrintStackTrace")
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefix;
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
+
+@SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
 public class WarpsManager {
     private static final File warpsFile = new File(PotatoSurvival.getInstance().getDataFolder(), "warps.json");
     private static final Map<String, Map<String, Location>> warpsMap = new HashMap<>();
@@ -125,6 +131,119 @@ public class WarpsManager {
                 warpsMap.remove(playerUUID);
             }
             saveWarps();
+        }
+    }
+
+    private static final Map<String, Map<String, WarpShareRequest>> pendingRequests = new HashMap<>();
+
+
+    public static void shareWarp(Player sender, Player receiver, String warpName) {
+        String senderUUID = sender.getUniqueId().toString();
+        String receiverUUID = receiver.getUniqueId().toString();
+        String requestKey = senderUUID + ":" + warpName;
+
+        Location warpLocation = WarpsManager.getWarp(senderUUID, warpName);
+
+        // Add request to the nested map
+        pendingRequests
+                .computeIfAbsent(receiverUUID, k -> new HashMap<>())
+                .put(requestKey, new WarpShareRequest(sender, warpName, warpLocation));
+
+        receiver.sendMessage(prefix + " §e '" + sender.getName() + "'§7 wants to share a warp with you: §a" + warpName);
+
+        String acceptCommand = "/sharewarp " + warpName + " " + sender.getName() + " " + "accept";
+        String declineCommand = "/sharewarp " + warpName + " " + sender.getName() + " " + "decline";
+        Component msg = Utils.miniMessage().deserialize(prefixMini + " " +
+                "<green><bold><click:run_command:" + acceptCommand + ">[Accept]<reset> " +
+                "<red><bold><click:run_command:" + declineCommand + ">[Decline]");
+        receiver.sendMessage(msg);
+        sender.sendMessage("§6Request sent to §a" + receiver.getName());
+    }
+
+
+    public static void acceptWarp(Player receiver, Player sender1, String warpName) {
+        String receiverUUID = receiver.getUniqueId().toString();
+        String senderName = sender1.getName();
+        Player sender = Bukkit.getPlayer(senderName);
+
+        if (sender == null) {
+            receiver.sendMessage(prefix + "§c Error: " + ChatColor.YELLOW + "'" + senderName + "'" +
+                    ChatColor.RED + " is not online.");
+            return;
+        }
+
+        String senderUUID = sender.getUniqueId().toString();
+        String requestKey = senderUUID + ":" + warpName;
+
+        Map<String, WarpShareRequest> requests = pendingRequests.get(receiverUUID);
+        if (requests == null || !requests.containsKey(requestKey)) {
+            receiver.sendMessage("§cNo warp share request found for '" + warpName + "' from " + senderName + ".");
+            return;
+        }
+
+        WarpShareRequest request = requests.remove(requestKey);
+        if (requests.isEmpty()) {
+            pendingRequests.remove(receiverUUID); // Clean up if no more requests
+        }
+
+        WarpsManager.saveWarp(receiverUUID, request.getWarpName(), request.getWarpLocation());
+        receiver.sendMessage("§aWarp '" + request.getWarpName() + "' from " + senderName + " has been added to your list.");
+        sender.sendMessage("§a" + receiver.getName() + " accepted your warp request.");
+    }
+
+
+    public static void declineWarp(Player receiver, Player sender1, String warpName) {
+        String receiverUUID = receiver.getUniqueId().toString();
+        String senderName = sender1.getName();
+        Player sender = Bukkit.getPlayer(senderName);
+
+        if (sender == null) {
+            receiver.sendMessage(prefix + "§c Error: " + ChatColor.YELLOW + "'" + senderName + "'" +
+                    ChatColor.RED + " is not online.");
+            return;
+        }
+
+        String senderUUID = sender.getUniqueId().toString();
+        String requestKey = senderUUID + ":" + warpName;
+
+        Map<String, WarpShareRequest> requests = pendingRequests.get(receiverUUID);
+        if (requests == null || !requests.containsKey(requestKey)) {
+            receiver.sendMessage("§cNo warp share request found for '" + warpName + "' from " + senderName + ".");
+            return;
+        }
+
+        requests.remove(requestKey);
+        if (requests.isEmpty()) {
+            pendingRequests.remove(receiverUUID); // Clean up if no more requests
+        }
+
+        receiver.sendMessage("§cYou declined the warp '" + warpName + "' from " + senderName + ".");
+        sender.sendMessage("§c" + receiver.getName() + " declined your warp request.");
+    }
+
+
+    private static class WarpShareRequest {
+        private final Player sender;
+        private final String warpName;
+        private final Location warpLocation;
+
+        public WarpShareRequest(Player sender, String warpName, Location warpLocation) {
+            this.sender = sender;
+            this.warpName = warpName;
+            this.warpLocation = warpLocation;
+        }
+
+        @SuppressWarnings("unused")
+        public Player getSender() {
+            return sender;
+        }
+
+        public String getWarpName() {
+            return warpName;
+        }
+
+        public Location getWarpLocation() {
+            return warpLocation;
         }
     }
 }
