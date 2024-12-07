@@ -1,17 +1,16 @@
 package com.mcdragonmasters.potatosurvival.commands.warps;
 
-import com.mcdragonmasters.potatosurvival.PotatoSurvival;
-import com.mcdragonmasters.potatosurvival.database.WarpsManager;
+import com.mcdragonmasters.potatosurvival.jsonDatabase.WarpsManager;
 
 import dev.jorel.commandapi.CommandTree;
 import dev.jorel.commandapi.arguments.*;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.Objects;
 
-@SuppressWarnings({"deprecation"})
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
+
 public class ShareWarpCommand {
     public static void register() {
          Argument<String> warpNameArg = new StringArgument("warpNameArg").replaceSuggestions(
@@ -31,7 +30,7 @@ public class ShareWarpCommand {
                             if (WarpsManager.getWarp(player.getUniqueId().toString(), warpName) != null) {
                                 WarpsManager.shareWarp(player, receiver, warpName);
                             } else {
-                                player.sendMessage(PotatoSurvival.getPrefix() + ChatColor.RED + " This Warp does not exist!");
+                                player.sendRichMessage(prefixMini + "<red> This Warp does not exist!");
                             }
                         })
                         .then(acceptOrDeclineArg
@@ -47,10 +46,10 @@ public class ShareWarpCommand {
                                             WarpsManager.declineWarp(player, sender, warpName);
                                             break;
                                         case null:
-                                            player.sendMessage(ChatColor.RED + "Error: null");
+                                            player.sendRichMessage("<red>Error: null");
                                             break;
                                         default:
-                                            player.sendMessage(ChatColor.RED + "Error");
+                                            player.sendRichMessage("<red>Error");
                                             break;
                                     }
                                 }))))

@@ -7,7 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 @SuppressWarnings({"deprecation", "unused"})
 public class Logger {
     private static final String prefix = net.md_5.bungee.api.ChatColor.of("#40ff00")
-            + "[potatosurvival] " + ChatColor.RESET;
+            + "[PotatoSurvival] " + ChatColor.RESET;
     public static class getLogger{
         static ConsoleCommandSender console = Bukkit.getConsoleSender();
         public static void success(String message){

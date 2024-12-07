@@ -1,19 +1,16 @@
 package com.mcdragonmasters.potatosurvival.commands.warps;
 
-import com.mcdragonmasters.potatosurvival.database.WarpsManager;
-import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefix;
+import com.mcdragonmasters.potatosurvival.jsonDatabase.WarpsManager;
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
 
-import org.bukkit.ChatColor;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@SuppressWarnings({"deprecation"})
 public class RenameWarpCommand {
     public static void register() {
         List<Argument<?>> arguments = new ArrayList<>();
@@ -34,13 +31,13 @@ public class RenameWarpCommand {
                         if (WarpsManager.getWarp(sender.getUniqueId().toString(), newWarpName) == null) {
                             WarpsManager.saveWarp(sender.getUniqueId().toString(), newWarpName, WarpsManager.getWarp(sender.getUniqueId().toString(), oldWarpName));
                             WarpsManager.removeWarp(uuid, oldWarpName);
-                            sender.sendMessage(prefix + ChatColor.GREEN + " Renamed Warp " + ChatColor.YELLOW + "'" + oldWarpName + "'" +
-                                    ChatColor.GREEN + " to " + ChatColor.YELLOW + "'" + newWarpName + "'");
+                            sender.sendRichMessage(prefixMini + "<green> Renamed Warp <yellow>'" + oldWarpName +
+                                    "'<green> to <yellow>'" + newWarpName + "'");
                         } else {
-                            sender.sendMessage(prefix + ChatColor.RED + " A Warp with this name already exists!");
+                            sender.sendRichMessage(prefixMini + "<red> A Warp with this name already exists!");
                         }
                     } else {
-                        sender.sendMessage(prefix + ChatColor.RED + " This Warp does not exist!");
+                        sender.sendRichMessage(prefixMini + "<red> This Warp does not exist!");
                     }
 
                 })

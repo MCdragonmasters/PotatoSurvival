@@ -1,6 +1,5 @@
 package com.mcdragonmasters.potatosurvival.utils;
 
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.BlastingRecipe;
@@ -30,8 +29,5 @@ public class Utils {
     public static String formatCoords(double x, double y, double z) {
         DecimalFormat df = new DecimalFormat("#.##");
         return df.format(x) + ", " + df.format(y) + ", " + df.format(z);
-    }
-    public static MiniMessage miniMessage() {
-        return MiniMessage.miniMessage();
     }
 }

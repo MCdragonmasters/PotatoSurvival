@@ -1,7 +1,7 @@
 package com.mcdragonmasters.potatosurvival;
 
 import com.mcdragonmasters.potatosurvival.commands.RegisterCommands;
-import com.mcdragonmasters.potatosurvival.database.HomesManager;
+import com.mcdragonmasters.potatosurvival.jsonDatabase.HomesManager;
 import com.mcdragonmasters.potatosurvival.listeners.RegisterListeners;
 import com.mcdragonmasters.potatosurvival.utils.Logger;
 import dev.jorel.commandapi.CommandAPI;
@@ -20,7 +20,7 @@ public class PotatoSurvival extends JavaPlugin {
     public static String prefix = ChatColor.GOLD + "Potato Survival" + ChatColor.GRAY + " >" + ChatColor.RESET;
     public static PotatoSurvival instance;
     public static FileConfiguration config;
-    public static String prefixMini = "<gold>Potato Survival<gray> > <reset>";
+    public static String prefixMini = "<gold>Potato Survival<gray> ><reset>";
 
     @Override
     public void onLoad() {

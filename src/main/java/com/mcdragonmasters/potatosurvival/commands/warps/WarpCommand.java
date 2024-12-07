@@ -1,19 +1,17 @@
 package com.mcdragonmasters.potatosurvival.commands.warps;
 
-import com.mcdragonmasters.potatosurvival.PotatoSurvival;
-import com.mcdragonmasters.potatosurvival.database.WarpsManager;
+import com.mcdragonmasters.potatosurvival.jsonDatabase.WarpsManager;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
 import dev.jorel.commandapi.arguments.StringArgument;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
 
-@SuppressWarnings({"deprecation"})
 public class WarpCommand {
     public static void register() {
         List<Argument<?>> arguments = new ArrayList<>();
@@ -27,9 +25,9 @@ public class WarpCommand {
                         Location warpLocation = WarpsManager.getWarp(sender.getUniqueId().toString(), (String) args.get("warpName"));
                         if (warpLocation != null) {
                             sender.teleport(warpLocation);
-                            sender.sendMessage(ChatColor.GOLD + "Warping to " + ChatColor.YELLOW + "'" + args.get("warpName") + "'");
+                            sender.sendRichMessage("<gold>Warping to <yellow>'" + args.get("warpName") + "'");
                         } else {
-                            sender.sendMessage(PotatoSurvival.getPrefix() + ChatColor.RED + " This Warp does not exist!");
+                            sender.sendRichMessage(prefixMini + "<red> This Warp does not exist!");
                         }
                 })
                 .register();

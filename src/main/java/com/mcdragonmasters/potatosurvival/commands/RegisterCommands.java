@@ -17,5 +17,7 @@ public class RegisterCommands {
         DeleteWarpCommand.register();
         RenameWarpCommand.register();
         ShareWarpCommand.register();
+
+        NickCommand.register();
     }
 }

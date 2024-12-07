@@ -1,4 +1,4 @@
-package com.mcdragonmasters.potatosurvival.database;
+package com.mcdragonmasters.potatosurvival.jsonDatabase;
 
 import com.google.gson.*;
 import com.mcdragonmasters.potatosurvival.PotatoSurvival;
@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("CallToPrintStackTrace")
 public class HomesManager {
 
     // Static fields to store homes data

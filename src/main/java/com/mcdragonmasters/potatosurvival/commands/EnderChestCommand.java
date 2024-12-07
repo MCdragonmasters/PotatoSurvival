@@ -12,5 +12,6 @@ public class EnderChestCommand {
                     sender.openInventory(sender.getEnderChest());
                 })
                 .register();
+
     }
 }

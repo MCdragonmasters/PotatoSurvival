@@ -1,9 +1,11 @@
+import io.papermc.paperweight.userdev.ReobfArtifactConfiguration
 import org.apache.tools.ant.filters.ReplaceTokens
 
 
 plugins {
     id 'java'
     id 'com.gradleup.shadow' version '8.3.3'
+    id "io.papermc.paperweight.userdev" version "1.7.7"
 }
 
 group = "com.mcdragonmasters"
@@ -21,6 +23,7 @@ dependencies {
     compileOnly "io.papermc.paper:paper-api:1.21.3-R0.1-SNAPSHOT"
     implementation "dev.jorel:commandapi-bukkit-shade-mojang-mapped:9.6.1"
     implementation "net.kyori:adventure-text-minimessage:4.17.0"
+    paperweight.paperDevBundle("1.21.3-R0.1-SNAPSHOT")
 }
 build {
     dependsOn(shadowJar)
@@ -32,11 +35,13 @@ build {
     }
 }
 
+reobfJar {
+    paperweight.reobfArtifactConfiguration = ReobfArtifactConfiguration.getMOJANG_PRODUCTION()
+}
 shadowJar {
     archiveClassifier = null
     relocate("dev.jorel.commandapi", "com.mcdragonmasters.potatosurvival.commandapi")
 }
-
 java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(21))
 }

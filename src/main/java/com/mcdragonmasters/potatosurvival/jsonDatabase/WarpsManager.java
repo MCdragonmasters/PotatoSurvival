@@ -1,12 +1,9 @@
-package com.mcdragonmasters.potatosurvival.database;
+package com.mcdragonmasters.potatosurvival.jsonDatabase;
 
 import com.google.gson.*;
 import com.mcdragonmasters.potatosurvival.PotatoSurvival;
 import com.mcdragonmasters.potatosurvival.utils.Logger;
-import com.mcdragonmasters.potatosurvival.utils.Utils;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,10 +11,9 @@ import org.bukkit.entity.Player;
 import java.io.*;
 import java.util.*;
 
-import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefix;
 import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
 
-@SuppressWarnings({"CallToPrintStackTrace", "deprecation"})
+@SuppressWarnings({"CallToPrintStackTrace"})
 public class WarpsManager {
     private static final File warpsFile = new File(PotatoSurvival.getInstance().getDataFolder(), "warps.json");
     private static final Map<String, Map<String, Location>> warpsMap = new HashMap<>();
@@ -141,23 +137,27 @@ public class WarpsManager {
         String senderUUID = sender.getUniqueId().toString();
         String receiverUUID = receiver.getUniqueId().toString();
         String requestKey = senderUUID + ":" + warpName;
-
+        if (sender == receiver) {
+            sender.sendRichMessage("<red>Error: You can't send a Share Warp request to yourself");
+            return;
+        }
         Location warpLocation = WarpsManager.getWarp(senderUUID, warpName);
-
         // Add request to the nested map
         pendingRequests
                 .computeIfAbsent(receiverUUID, k -> new HashMap<>())
                 .put(requestKey, new WarpShareRequest(sender, warpName, warpLocation));
 
-        receiver.sendMessage(prefix + " §e '" + sender.getName() + "'§7 wants to share a warp with you: §a" + warpName);
+        receiver.sendRichMessage(prefixMini +
+                "<yellow> '" + sender.getName() + "'<gray> wants to share a warp named<yellow> '" + warpName + "'");
 
         String acceptCommand = "/sharewarp " + warpName + " " + sender.getName() + " " + "accept";
         String declineCommand = "/sharewarp " + warpName + " " + sender.getName() + " " + "decline";
-        Component msg = Utils.miniMessage().deserialize(prefixMini + " " +
+        receiver.sendRichMessage(prefixMini + " " +
                 "<green><bold><click:run_command:" + acceptCommand + ">[Accept]<reset> " +
                 "<red><bold><click:run_command:" + declineCommand + ">[Decline]");
-        receiver.sendMessage(msg);
-        sender.sendMessage("§6Request sent to §a" + receiver.getName());
+
+        sender.sendRichMessage(prefixMini +
+                "<green> Request sent to <yellow>'" + receiver.getName() + "'");
     }
 
 
@@ -167,17 +167,28 @@ public class WarpsManager {
         Player sender = Bukkit.getPlayer(senderName);
 
         if (sender == null) {
-            receiver.sendMessage(prefix + "§c Error: " + ChatColor.YELLOW + "'" + senderName + "'" +
-                    ChatColor.RED + " is not online.");
+            receiver.sendRichMessage(prefixMini +
+                    "<red> Error: <yellow>'" + senderName + "'<red> is not online");
+            return;
+        }
+        String senderUUID = sender.getUniqueId().toString();
+        String requestKey = senderUUID + ":" + warpName;
+        String oldWarpName = null;
+        if (getWarp(receiverUUID, warpName) != null) {
+            oldWarpName = warpName;
+            warpName = warpName + "-" + senderName;
+        }
+        if (getWarp(receiverUUID, warpName) != null) {
+            receiver.sendRichMessage("<red>Error: Warp names <yellow>'" + oldWarpName+"'<red> and<yellow> '" + warpName+"'<red> are both taken");
+            sender.sendRichMessage("<red>Error: Unable to share warp to<yellow>'" + receiver +"'<red> Because Warp names <yellow>'" + oldWarpName+"'<red> and<yellow> '" + warpName+"'<red> are both taken");
             return;
         }
 
-        String senderUUID = sender.getUniqueId().toString();
-        String requestKey = senderUUID + ":" + warpName;
 
         Map<String, WarpShareRequest> requests = pendingRequests.get(receiverUUID);
         if (requests == null || !requests.containsKey(requestKey)) {
-            receiver.sendMessage("§cNo warp share request found for '" + warpName + "' from " + senderName + ".");
+            receiver.sendRichMessage(prefixMini +
+                    "<red> No warp share request found for <yellow>'" + warpName + "'<red> from <yellow>'" + senderName + "'");
             return;
         }
 
@@ -186,9 +197,13 @@ public class WarpsManager {
             pendingRequests.remove(receiverUUID); // Clean up if no more requests
         }
 
-        WarpsManager.saveWarp(receiverUUID, request.getWarpName(), request.getWarpLocation());
-        receiver.sendMessage("§aWarp '" + request.getWarpName() + "' from " + senderName + " has been added to your list.");
-        sender.sendMessage("§a" + receiver.getName() + " accepted your warp request.");
+        WarpsManager.saveWarp(receiverUUID, warpName, request.getWarpLocation());
+        receiver.sendRichMessage(prefixMini +
+                "<green> Warp <yellow>'" + warpName + "'<green> from <yellow>'" + senderName +
+                "'<green> has been added to your list.");
+
+        sender.sendRichMessage(prefixMini +
+                "<yellow> '" + receiver.getName() + "'<green> accepted your warp request.");
     }
 
 
@@ -198,8 +213,8 @@ public class WarpsManager {
         Player sender = Bukkit.getPlayer(senderName);
 
         if (sender == null) {
-            receiver.sendMessage(prefix + "§c Error: " + ChatColor.YELLOW + "'" + senderName + "'" +
-                    ChatColor.RED + " is not online.");
+            receiver.sendRichMessage(prefixMini +
+                    "<red> Error: <yellow>'" + senderName + "'<red> is not online.");
             return;
         }
 
@@ -208,7 +223,8 @@ public class WarpsManager {
 
         Map<String, WarpShareRequest> requests = pendingRequests.get(receiverUUID);
         if (requests == null || !requests.containsKey(requestKey)) {
-            receiver.sendMessage("§cNo warp share request found for '" + warpName + "' from " + senderName + ".");
+            receiver.sendRichMessage(prefixMini +
+                    "<red> No warp share request found for <yellow>'" + warpName + "'<red> from <yellow>'" + senderName + "'");
             return;
         }
 
@@ -217,8 +233,10 @@ public class WarpsManager {
             pendingRequests.remove(receiverUUID); // Clean up if no more requests
         }
 
-        receiver.sendMessage("§cYou declined the warp '" + warpName + "' from " + senderName + ".");
-        sender.sendMessage("§c" + receiver.getName() + " declined your warp request.");
+        receiver.sendRichMessage(prefixMini +
+                "<red> You declined Warp <yellow>'" + warpName + "'<red> from <yellow>'" + senderName + "'");
+        sender.sendRichMessage(prefixMini +
+                "<yellow> '" + receiver.getName() + "'<red> declined your Share Warp request.");
     }
 
 

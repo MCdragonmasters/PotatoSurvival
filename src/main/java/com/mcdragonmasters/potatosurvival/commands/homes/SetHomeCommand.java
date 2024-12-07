@@ -1,29 +1,22 @@
 package com.mcdragonmasters.potatosurvival.commands.homes;
 
-import com.mcdragonmasters.potatosurvival.PotatoSurvival;
-import com.mcdragonmasters.potatosurvival.database.HomesManager;
+import com.mcdragonmasters.potatosurvival.jsonDatabase.HomesManager;
 import dev.jorel.commandapi.CommandAPICommand;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
-import java.text.DecimalFormat;
+import static com.mcdragonmasters.potatosurvival.utils.Utils.formatCoords;
+import static com.mcdragonmasters.potatosurvival.PotatoSurvival.prefixMini;
 
-@SuppressWarnings({"deprecation"})
 public class SetHomeCommand {
-    public static String format(double num) {
-        DecimalFormat df = new DecimalFormat("#.##");
-        return df.format(num);
-    }
     public static void register() {
         new CommandAPICommand("sethome")
                 .withPermission("potatosurvival.sethome")
                 .executesPlayer((sender, args) -> {
-                    Location location = sender.getLocation();
+                    Location loc = sender.getLocation();
                         HomesManager.removeOldHome(sender.getUniqueId().toString());
-                        HomesManager.saveHome(sender.getUniqueId().toString(), location);
-                        sender.sendMessage(PotatoSurvival.getPrefix() + ChatColor.GRAY + " Set Home to " +
-                                ChatColor.YELLOW + format(location.getX()) + ", " +
-                                format(location.getY()) + ", " + format(location.getZ()));
+                        HomesManager.saveHome(sender.getUniqueId().toString(), loc);
+                        sender.sendRichMessage(
+                                prefixMini + "<gray> Set Home to <yellow>" + formatCoords(loc.getX(), loc.getZ(), loc.getZ()));
                 })
                 .register();
     }
