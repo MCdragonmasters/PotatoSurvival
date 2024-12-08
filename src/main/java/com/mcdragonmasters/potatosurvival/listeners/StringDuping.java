@@ -2,6 +2,7 @@ package com.mcdragonmasters.potatosurvival.listeners;
 
 import com.mcdragonmasters.potatosurvival.PotatoSurvival;
 import com.mcdragonmasters.potatosurvival.utils.BlockDataUtils;
+import io.papermc.paper.event.block.BlockBreakBlockEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,13 +10,15 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class StringDuping implements Listener {
+
+    private final BlockData disarmedTripwire = Bukkit.createBlockData("minecraft:tripwire[disarmed=true]");
+
     @EventHandler
     public void onTripwireBreak(BlockBreakEvent e) {
         if (e.getPlayer().getInventory().getItemInMainHand().getType() == Material.SHEARS) {
@@ -26,36 +29,33 @@ public class StringDuping implements Listener {
             }
         }
     }
+
     private final Set<String> processedBlocks = new HashSet<>();
 
     @EventHandler
-    public void onFlow(BlockFromToEvent e) {
+    public void onWaterBreakString(BlockBreakBlockEvent e) {
+        Block sourceBlock = e.getSource();
         Block block = e.getBlock();
-        Block toBlock = e.getToBlock();
 
-        if (block.getType().name().endsWith("TRAPDOOR")) {
-            String blockKey = block.getWorld().getName() + ":" + block.getX() + "," + block.getY() + "," + block.getZ();
+        if (!(block.getType() == Material.TRIPWIRE)) return;
+        if (!(block.getBlockData().toString().contains("disarmed=true"))) return;
+        if (!sourceBlock.getType().name().endsWith("TRAPDOOR")) return;
 
-            if (processedBlocks.contains(blockKey)) {
-                return;
-            }
+        String blockKey = sourceBlock.getWorld().getName() + ":" + sourceBlock.getX() + "," + sourceBlock.getY() + "," + sourceBlock.getZ();
 
-            if (BlockDataUtils.getBooleanBlockDataTag(toBlock.getBlockData(), "disarmed")) {
-                processedBlocks.add(blockKey);
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (BlockDataUtils.getBooleanBlockDataTag(block.getBlockData(), "powered")) {
-                            cancel();
-                        }
-                        if (toBlock.getType() == Material.TRIPWIRE || toBlock.getType() == Material.WATER) {
-                            toBlock.setBlockData(Bukkit.createBlockData("minecraft:tripwire[disarmed=true]"));
-                        }
-                        processedBlocks.remove(blockKey);
-                    }
-                }.runTaskTimer(PotatoSurvival.getInstance(), 1, 5);
-            }
+        if (processedBlocks.contains(blockKey)) {
+            return;
         }
+        processedBlocks.add(blockKey);
+        new BukkitRunnable() { @Override public void run() {
+            if (sourceBlock.getBlockData().toString().contains("powered=true")) {
+                cancel();
+            }
+            if (block.getType() == Material.TRIPWIRE || block.getType() == Material.WATER) {
+                block.setBlockData(disarmedTripwire);
+            }
+            processedBlocks.remove(blockKey);
+          }
+        }.runTaskTimer(PotatoSurvival.getInstance(), 1, 5);
     }
 }
