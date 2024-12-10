@@ -18,6 +18,6 @@ public class RegisterCommands {
         RenameWarpCommand.register();
         ShareWarpCommand.register();
 
-        NickCommand.register();
+        //NickCommand.register();
     }
 }

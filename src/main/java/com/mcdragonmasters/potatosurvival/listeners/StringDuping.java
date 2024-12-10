@@ -56,6 +56,6 @@ public class StringDuping implements Listener {
             }
             processedBlocks.remove(blockKey);
           }
-        }.runTaskTimer(PotatoSurvival.getInstance(), 1, 5);
+        }.runTaskLater(PotatoSurvival.getInstance(), 1);
     }
 }
